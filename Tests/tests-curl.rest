@@ -1,0 +1,22 @@
+# Mais informacoes em:
+# https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
+@baseurl_application= http://localhost:8006
+@tenant_name = <tenant>
+@policy_name = <policy_name>
+@restapi_application_id = <restapi_application_id>
+@consumer_application_id = <consumer_application_id>
+@consumer_secret = <consumer_secret>
+
+# @name autenticar
+curl -X POST "https://{{tenant_name}}.b2clogin.com/{{tenant_name}}.onmicrosoft.com/{{policy_name}}/oauth2/v2.0/token" \
+    -H "Content-Type: application/x-www-form-urlencoded" \
+    -d "grant_type=client_credentials&client_id={{consumer_application_id}}&client_secret={{consumer_secret}}&scope=https://{{tenant_name}}.onmicrosoft.com/{{restapi_application_id}}/.default"
+
+###
+
+@token = {{autenticar.response.body.$.access_token}}
+
+# @name consultarContador
+curl -X GET "{{baseurl_application}}/Contador" \
+    -H "Authorization: Bearer {{token}}"
